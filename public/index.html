@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="lang-en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>AUTOFLOW — Internal Platform</title>
+<link rel="icon" type="image/jpeg" href="/assets/logo.jpg">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div id="circuitBg">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="cgrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#0080FF"/>
+        <stop offset="100%" stop-color="#00C6FF"/>
+      </linearGradient>
+    </defs>
+    <path class="cline" d="M0,120 L180,120 L230,170 L430,170 L480,120 L720,120"/>
+    <path class="cline" d="M1440,240 L1220,240 L1170,190 L980,190"/>
+    <path class="cline" d="M0,680 L220,680 L270,730 L520,730"/>
+    <path class="cline" d="M1440,760 L1180,760 L1130,710 L860,710 L810,760 L620,760"/>
+    <path class="cline" d="M120,0 L120,90 L170,140"/>
+    <path class="cline" d="M1320,900 L1320,780 L1270,730"/>
+    <circle class="cdot" cx="180" cy="120" r="3" style="animation-delay:.2s"/>
+    <circle class="cdot" cx="430" cy="170" r="3" style="animation-delay:1.1s"/>
+    <circle class="cdot" cx="720" cy="120" r="3" style="animation-delay:2s"/>
+    <circle class="cdot" cx="1220" cy="240" r="3" style="animation-delay:.6s"/>
+    <circle class="cdot" cx="980" cy="190" r="3" style="animation-delay:1.7s"/>
+    <circle class="cdot" cx="220" cy="680" r="3" style="animation-delay:.9s"/>
+    <circle class="cdot" cx="520" cy="730" r="3" style="animation-delay:2.3s"/>
+    <circle class="cdot" cx="1180" cy="760" r="3" style="animation-delay:.4s"/>
+    <circle class="cdot" cx="860" cy="710" r="3" style="animation-delay:1.5s"/>
+    <circle class="cdot" cx="620" cy="760" r="3" style="animation-delay:2.6s"/>
+  </svg>
+</div>
+
+<div id="app"><!-- rendered by JS --></div>
+
+<div id="langToggle">
+  <button data-lang="en">EN</button>
+  <button data-lang="ar">AR</button>
+</div>
+
+<div id="appFooter">
+  <span data-i18n="footer.text">Dev by AUTOFLOW</span>
+  <img src="/assets/logo.jpg" alt="AUTOFLOW"/>
+</div>
+
+<div id="bootOverlay">
+  <svg viewBox="0 0 400 400">
+    <defs>
+      <linearGradient id="bootGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#0080FF"/>
+        <stop offset="100%" stop-color="#00C6FF"/>
+      </linearGradient>
+    </defs>
+    <g id="bootLines"></g>
+    <g id="bootNodes"></g>
+    <circle class="boot-hub" cx="200" cy="200" r="12" fill="#00C6FF"/>
+  </svg>
+  <div class="boot-text" data-i18n="boot.text">Connecting to AUTOFLOW…</div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
