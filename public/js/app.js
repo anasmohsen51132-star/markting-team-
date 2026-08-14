@@ -18,6 +18,7 @@ const I18N = {
     "nav.overview":"Overview",
     "nav.team":"Team",
     "nav.logout":"Log out",
+    "confirm.logout":"Log out of AUTOFLOW?",
     "role.admin":"Administrator",
     "role.marketing":"Marketing",
     "admin.overview.title":"Command Overview",
@@ -96,6 +97,7 @@ const I18N = {
     "nav.overview":"نظرة عامة",
     "nav.team":"الفريق",
     "nav.logout":"تسجيل الخروج",
+    "confirm.logout":"تسجيل الخروج من AUTOFLOW؟",
     "role.admin":"مدير النظام",
     "role.marketing":"تسويق",
     "admin.overview.title":"لوحة القيادة",
@@ -419,7 +421,15 @@ function playBootTransition(nextScreen){
 }
 
 async function logout(){
+  if(!window.confirm(t('confirm.logout'))) return;
   try{ await api('/auth/logout', { method:'POST' }); }catch(e){ /* ignore */ }
+  clearSessionAndShowLogin();
+}
+
+// Used when the server tells us the session is already invalid (expired/removed) —
+// no confirmation needed since there's nothing left to log out of, and no point
+// calling /auth/logout again for a session that's already dead server-side.
+function clearSessionAndShowLogin(){
   state.currentUser = null;
   state.screen = 'login';
   state.adminView = 'overview';
@@ -469,7 +479,7 @@ async function loadAdminView(){
       content.innerHTML = renderMemberProfile(member, deals);
     }
   }catch(err){
-    if(err.status === 401){ logout(); return; }
+    if(err.status === 401){ clearSessionAndShowLogin(); return; }
     content.innerHTML = `<div class="glass empty-state">${escapeHtml(t('err.generic'))}</div>`;
   }
 }
@@ -489,7 +499,9 @@ function renderTopNav(currentMember, tabs, activeKey){
     </div>` : ''}
     <div class="nav-right">
       <span class="serial-pill">#${escapeHtml(currentMember.serial)}</span>
-      <button class="btn btn-ghost btn-icon" data-action="logout" title="${escapeHtml(t('nav.logout'))}">${ICON.logout}</button>
+      <button class="btn btn-ghost logout-btn" data-action="logout" title="${escapeHtml(t('nav.logout'))}">
+        ${ICON.logout}<span class="logout-label">${escapeHtml(t('nav.logout'))}</span>
+      </button>
     </div>
   </div>`;
 }
@@ -624,7 +636,7 @@ async function loadMarketingView(){
     state.cache.myDeals = deals;
     content.innerHTML = renderMarketingContent(deals);
   }catch(err){
-    if(err.status === 401){ logout(); return; }
+    if(err.status === 401){ clearSessionAndShowLogin(); return; }
     content.innerHTML = `<div class="glass empty-state">${escapeHtml(t('err.generic'))}</div>`;
   }
 }
