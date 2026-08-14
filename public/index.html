@@ -49,18 +49,7 @@
 </div>
 
 <div id="bootOverlay">
-  <svg viewBox="0 0 400 400">
-    <defs>
-      <linearGradient id="bootGrad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#0080FF"/>
-        <stop offset="100%" stop-color="#00C6FF"/>
-      </linearGradient>
-    </defs>
-    <g id="bootLines"></g>
-    <g id="bootNodes"></g>
-    <circle class="boot-hub" cx="200" cy="200" r="12" fill="#00C6FF"/>
-  </svg>
-  <div class="boot-text" data-i18n="boot.text">Connecting to AUTOFLOW…</div>
+  <video id="bootVideo" src="/assets/boot-transition.mp4" playsinline preload="auto"></video>
 </div>
 
 <script src="/js/app.js"></script>

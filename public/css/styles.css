@@ -186,31 +186,19 @@ a{color:inherit;}
 .login-msg{min-height:18px; font-size:12.5px; color:var(--danger); margin:12px 0 6px;}
 .login-btn{width:100%; margin-top:14px; padding:13px; font-size:14.5px; letter-spacing:.4px;}
 
-/* ---------- boot overlay ---------- */
+/* ---------- boot overlay (real brand transition video) ---------- */
 #bootOverlay{
   position:fixed; inset:0; z-index:200; background:var(--bg-void);
-  display:flex; align-items:center; justify-content:center;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
   opacity:0; visibility:hidden; pointer-events:none;
 }
-#bootOverlay.show{opacity:1; visibility:visible; pointer-events:all; transition:opacity .1s;}
-#bootOverlay.fadeout{opacity:0; transition:opacity .45s ease .95s;}
-#bootOverlay svg{width:min(92vw,460px); height:min(92vw,460px); overflow:visible;}
-.boot-line{fill:none; stroke:url(#bootGrad); stroke-width:2; stroke-linecap:round; stroke-dasharray:220; stroke-dashoffset:220;}
-#bootOverlay.show .boot-line{animation:drawLine .55s cubic-bezier(.2,.7,.3,1) forwards;}
-@keyframes drawLine{to{stroke-dashoffset:0;}}
-.boot-node{opacity:0; transform-origin:center; transform-box:fill-box;}
-#bootOverlay.show .boot-node{animation:nodePulse .5s cubic-bezier(.3,1.4,.4,1) forwards;}
-@keyframes nodePulse{0%{opacity:0; transform:scale(0);}60%{opacity:1; transform:scale(1.4);}100%{opacity:1; transform:scale(1);}}
-.boot-hub{opacity:0; transform-origin:center; transform-box:fill-box;}
-#bootOverlay.show .boot-hub{animation:hubPulse .6s ease forwards;}
-@keyframes hubPulse{0%{opacity:0; transform:scale(0);}50%{opacity:1; transform:scale(1.5);}100%{opacity:.95; transform:scale(1);}}
-.boot-text{
-  position:absolute; bottom:18%; left:0; right:0; text-align:center;
-  font-family:var(--mono); font-size:12px; letter-spacing:3px; color:var(--blue-2);
-  opacity:0; text-transform:uppercase;
+#bootOverlay.show{opacity:1; visibility:visible; pointer-events:all; transition:opacity .08s;}
+#bootOverlay.fadeout{opacity:0; transition:opacity .5s ease;}
+#bootVideo{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  background:var(--bg-void);
 }
-#bootOverlay.show .boot-text{animation:textIn .5s ease .5s forwards;}
-@keyframes textIn{to{opacity:.85;}}
 
 /* ---------- nav ---------- */
 .topnav{

@@ -374,42 +374,48 @@ async function attemptLogin(){
   }
 }
 
-/* ---------- boot transition ---------- */
-function buildBootSvg(){
-  const linesG = document.getElementById('bootLines');
-  const nodesG = document.getElementById('bootNodes');
-  linesG.innerHTML = ''; nodesG.innerHTML = '';
-  const cx=200, cy=200, r=140;
-  for(let i=0;i<6;i++){
-    const angle = (Math.PI*2/6)*i - Math.PI/2;
-    const x = cx + r*Math.cos(angle);
-    const y = cy + r*Math.sin(angle);
-    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1', cx); line.setAttribute('y1', cy);
-    line.setAttribute('x2', x); line.setAttribute('y2', y);
-    line.setAttribute('class','boot-line');
-    line.style.animationDelay = (i*0.07)+'s';
-    linesG.appendChild(line);
-    const node = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    node.setAttribute('cx', x); node.setAttribute('cy', y); node.setAttribute('r', 7);
-    node.setAttribute('fill', i%2===0 ? '#00C6FF' : '#0080FF');
-    node.setAttribute('class','boot-node');
-    node.style.animationDelay = (0.35 + i*0.07)+'s';
-    nodesG.appendChild(node);
-  }
-}
+/* ---------- boot transition (plays the real AUTOFLOW brand video, once, in full) ---------- */
 function playBootTransition(nextScreen){
   const overlay = document.getElementById('bootOverlay');
-  buildBootSvg();
-  overlay.classList.remove('fadeout');
-  overlay.classList.add('show');
-  setTimeout(()=>{
+  const video = document.getElementById('bootVideo');
+
+  const reveal = () => {
     state.screen = nextScreen;
     if(nextScreen==='admin'){ state.adminView='overview'; }
     render();
-  }, 250);
-  setTimeout(()=>{ overlay.classList.add('fadeout'); }, 300);
-  setTimeout(()=>{ overlay.classList.remove('show','fadeout'); }, 1450);
+  };
+
+  let settled = false;
+  const finish = () => {
+    if(settled) return;
+    settled = true;
+    clearTimeout(safetyTimer);
+    reveal();
+    overlay.classList.add('fadeout');
+    setTimeout(()=>{ overlay.classList.remove('show','fadeout'); video.pause(); }, 520);
+  };
+
+  // Safety net: if the video can't load/play for any reason, don't strand the user on a blank screen.
+  const safetyTimer = setTimeout(finish, 4800);
+
+  video.onended = finish;
+  video.onerror = finish;
+
+  overlay.classList.remove('fadeout');
+  overlay.classList.add('show');
+  video.currentTime = 0;
+  video.muted = false; // try with sound first — this call is still inside the login click's gesture chain
+
+  const playPromise = video.play();
+  if(playPromise && playPromise.catch){
+    playPromise.catch(()=>{
+      // Some browsers block unmuted autoplay once a network await has broken the
+      // "recent user gesture" window (notably Safari). Fall back to a silent play
+      // so the visual transition always runs even if the sound gets blocked.
+      video.muted = true;
+      video.play().catch(()=>{ /* if even muted playback fails, the safety timer covers it */ });
+    });
+  }
 }
 
 async function logout(){
